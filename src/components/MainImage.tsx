@@ -2,9 +2,12 @@ import mainImage from '../assets/images/mainImage.png'
 
 export default function MainImage() {
     return (
-        <div className="relative h-full w-full">
-            <img src={mainImage} className="absolute right-0 w-full" />
-            <div className="ml-10 mr-4 h-full rounded-2xl bg-primaryColor-light"></div>
+        <div className="relative flex size-full max-h-[60rem] justify-center">
+            <div className="m-auto size-11/12 rounded-2xl bg-primaryColor-light"></div>
+            <img
+                src={mainImage}
+                className="absolute inset-0 m-auto bg-auto bg-no-repeat"
+            />
         </div>
     )
 }
