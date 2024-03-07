@@ -53,7 +53,7 @@ export default function MainLayout() {
                     </div>
                 </div>
             </div>
-            <main className="flex-1">
+            <main className="flex-1 hidden lg:block">
                 <Outlet />
             </main>
         </div>

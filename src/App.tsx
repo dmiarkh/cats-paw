@@ -1,20 +1,23 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import MainLayout from './pages/MainLayout'
 import MainImage from './components/MainImage'
+import ErrorPage from './pages/ErrorPage'
+import ContentLayout from './pages/ContentLayout'
 
 function App() {
     const router = createBrowserRouter([
         {
             path: '/',
             element: <MainLayout />,
+            errorElement: <ErrorPage />,
             children: [
                 {
-                    errorElement: <p></p>,
+                    index: true,
+                    element: <MainImage />,
+                },
+                {
+                    element: <ContentLayout />,
                     children: [
-                        {
-                            index: true,
-                            element: <MainImage />,
-                        },
                         {
                             path: 'voting',
                             element: <p>voting</p>,
