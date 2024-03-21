@@ -25,7 +25,7 @@ export default function NavCard({
             >
                 <img src={imageUrl} />
             </div>
-            <span className="w-full rounded-2xl bg-white py-4 text-center tracking-widest group-hover:bg-primaryColor-light group-[.isActive]:bg-primaryColor group-[.isActive]:text-white">
+            <span className="w-full rounded-2xl bg-white py-4 text-center text-lg tracking-wider group-hover:bg-primaryColor-light group-[.isActive]:bg-primaryColor group-[.isActive]:text-white">
                 {cardName}
             </span>
         </NavLink>
