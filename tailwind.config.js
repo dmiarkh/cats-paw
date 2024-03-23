@@ -13,6 +13,7 @@ export default {
                 textColor: '#1D1D1D',
                 'textColor-light': '#8C8C8C',
                 likeColor: '#97EAB9',
+                favoriteColor: '#FF868E',
                 dislikeColor: '#FFD280',
                 votingCardColor: '#B4B7FF',
                 breedsCardColor: '#97EAB9',

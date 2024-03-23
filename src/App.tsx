@@ -3,6 +3,7 @@ import MainLayout from './pages/MainLayout'
 import MainImage from './components/MainImage'
 import ErrorPage from './pages/ErrorPage'
 import ContentLayout from './pages/ContentLayout'
+import Voting, { loader as votingLoader } from './pages/Voting'
 
 function App() {
     const router = createBrowserRouter([
@@ -20,7 +21,8 @@ function App() {
                     children: [
                         {
                             path: 'voting',
-                            element: <p>voting</p>,
+                            element: <Voting />,
+                            loader: votingLoader,
                         },
                         {
                             path: 'breeds',
@@ -37,7 +39,12 @@ function App() {
     ])
 
     return (
-        <RouterProvider router={router} fallbackElement={<h1>Loading...</h1>} />
+        <RouterProvider
+            router={router}
+            fallbackElement={
+                <h1 className="text-center text-9xl">Loading...</h1>
+            }
+        />
     )
 }
 

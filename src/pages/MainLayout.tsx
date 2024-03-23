@@ -8,7 +8,7 @@ import galleryImage from '../assets/images/galleryImage.png'
 export default function MainLayout() {
     return (
         //TODO: try out lg:container (side margins on the small screens)
-        <div className="font-jost container mx-auto flex max-h-screen min-h-screen p-8 selection:bg-primaryColor-light">
+        <div className="container mx-auto flex max-h-screen min-h-screen p-8 font-jost selection:bg-primaryColor-light">
             <div className="flex flex-1 flex-col items-center pt-2">
                 <div>
                     <header className="w-fit">
@@ -19,13 +19,15 @@ export default function MainLayout() {
                                 height={24}
                                 alt="cats paw logo"
                             />
-                            <h1 className="text-lg font-bold drop-shadow-md">
+                            <h1 className="text-lg font-bold text-textColor drop-shadow-md">
                                 CatsPaw
                             </h1>
                         </Link>
                     </header>
                     <div className="mt-40">
-                        <h2 className="text-3xl font-semibold">Hello there!</h2>
+                        <h2 className="text-3xl font-semibold text-textColor">
+                            Hello there!
+                        </h2>
                         <p className="mt-2 text-textColor-light">
                             Welcome to CatsPaw!
                         </p>
