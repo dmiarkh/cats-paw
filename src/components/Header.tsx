@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import SearchIcon from '../assets/images/search.svg'
 import LikeIcon from '../assets/images/like.svg'
 import FavoriteIcon from '../assets/images/fav_empty.svg'
@@ -6,7 +6,7 @@ import DisLikeIcon from '../assets/images/dislike.svg'
 
 export default function Header() {
     return (
-        <div className="flex w-full gap-3 bg-bgColor pb-3">
+        <div className="sticky top-0 z-10 flex gap-3 bg-bgColor pb-3 pt-8">
             <form className="relative flex-grow">
                 <input
                     type="text"
@@ -18,24 +18,28 @@ export default function Header() {
                     <img src={SearchIcon} width={20} height={20} />
                 </button>
             </form>
-            <Link
-                to={'likes'}
-                className="flex size-14 items-center justify-center rounded-xl bg-white hover:bg-primaryColor-light active:bg-primaryColor"
-            >
-                <img src={LikeIcon} />
-            </Link>
-            <Link
-                to={'favorites'}
-                className="flex size-14 items-center justify-center rounded-xl bg-white hover:bg-primaryColor-light active:bg-primaryColor"
-            >
-                <img src={FavoriteIcon} />
-            </Link>
-            <Link
-                to={'dislikes'}
-                className="flex size-14 items-center justify-center rounded-xl bg-white hover:bg-primaryColor-light active:bg-primaryColor"
-            >
-                <img src={DisLikeIcon} />
-            </Link>
+            <nav className="flex gap-3">
+                <NavLink
+                    to={'likes'}
+                    className={({ isActive }) =>
+                        `${isActive ? 'bg-primaryColor' : ''} flex size-14 items-center justify-center rounded-xl bg-white hover:bg-primaryColor-light active:bg-primaryColor`
+                    }
+                >
+                    <img src={LikeIcon} />
+                </NavLink>
+                <Link
+                    to={'favorites'}
+                    className="flex size-14 items-center justify-center rounded-xl bg-white hover:bg-primaryColor-light active:bg-primaryColor"
+                >
+                    <img src={FavoriteIcon} />
+                </Link>
+                <Link
+                    to={'dislikes'}
+                    className="flex size-14 items-center justify-center rounded-xl bg-white hover:bg-primaryColor-light active:bg-primaryColor"
+                >
+                    <img src={DisLikeIcon} />
+                </Link>
+            </nav>
         </div>
     )
 }

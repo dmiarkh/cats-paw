@@ -2,14 +2,14 @@ import { NavLink } from 'react-router-dom'
 
 interface Props {
     cardName: string
-    className: string
+    colorClassName: string
     imageUrl: string
     linkTo: string
 }
 
 export default function NavCard({
     imageUrl,
-    className,
+    colorClassName,
     cardName,
     linkTo,
 }: Props) {
@@ -21,7 +21,7 @@ export default function NavCard({
             }
         >
             <div
-                className={`${className} hidden h-48 w-36 items-center justify-center rounded-2xl ring-4 ring-opacity-40 group-hover:ring-opacity-100 group-[.isActive]:ring-primaryColor-light group-[.isActive]:ring-opacity-100 md:flex`}
+                className={`${colorClassName} hidden h-48 w-36 items-center justify-center rounded-2xl ring-4 ring-opacity-40 group-hover:ring-opacity-100 group-[.isActive]:ring-primaryColor-light group-[.isActive]:ring-opacity-100 md:flex`}
             >
                 <img src={imageUrl} />
             </div>

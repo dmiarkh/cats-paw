@@ -2,14 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-*::-webkit-scrollbar {
-    @apply bg-transparent w-1
-}
-
-*::-webkit-scrollbar-thumb {
-    @apply bg-[#606060] rounded-full border-8 border-white
-}
-
+/* *::-webkit-scrollbar { */
+/*     @apply bg-transparent w-1 */
+/* } */
+/**/
+/* *::-webkit-scrollbar-thumb { */
+/*     @apply bg-textColor-light rounded-full border-8 border-transparent */
+/* bg-[#606060] */
+/* } */
+/**/
 body {
-    @apply bg-bgColor
+    @apply bg-bgColor selection:bg-primaryColor-light
 }
