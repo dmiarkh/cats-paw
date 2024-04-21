@@ -1,5 +1,3 @@
-import likeIcon from '../assets/images/like.svg'
-
 export default function LogCard() {
     return (
         <div className="my-auto flex h-14 w-full content-baseline items-center rounded-xl bg-bgColor px-6">
@@ -10,7 +8,7 @@ export default function LogCard() {
                 ImageID: <b className="text-textColor">fQSunHvl8</b> was added
                 to Favorites
             </span>
-            <img src={likeIcon} width={20} height={20} className="ml-auto" />
         </div>
+        // <img src={likeIcon} width={20} height={20} className="ml-auto" />
     )
 }

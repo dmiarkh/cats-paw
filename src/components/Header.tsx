@@ -1,8 +1,8 @@
-import { Link, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import SearchIcon from '../assets/images/search.svg'
-import LikeIcon from '../assets/images/like.svg'
-import FavoriteIcon from '../assets/images/fav_empty.svg'
-import DisLikeIcon from '../assets/images/dislike.svg'
+import LikeIcon from './icons/LikeIcon'
+import FavoriteIcon from './icons/FavoriteIcon'
+import DislikeIcon from './icons/DislikeIcon'
 
 export default function Header() {
     return (
@@ -22,23 +22,39 @@ export default function Header() {
                 <NavLink
                     to={'likes'}
                     className={({ isActive }) =>
-                        `${isActive ? 'bg-primaryColor' : ''} flex size-14 items-center justify-center rounded-xl bg-white hover:bg-primaryColor-light active:bg-primaryColor`
+                        `${isActive ? 'isActive bg-primaryColor' : 'bg-white hover:bg-primaryColor-light'} group flex size-14 items-center justify-center rounded-xl`
                     }
                 >
-                    <img src={LikeIcon} />
+                    <LikeIcon
+                        className={
+                            'fill-primaryColor group-[.isActive]:fill-white'
+                        }
+                    />
                 </NavLink>
-                <Link
+                <NavLink
                     to={'favorites'}
-                    className="flex size-14 items-center justify-center rounded-xl bg-white hover:bg-primaryColor-light active:bg-primaryColor"
+                    className={({ isActive }) =>
+                        `${isActive ? 'isActive bg-primaryColor' : 'bg-white hover:bg-primaryColor-light'} group flex size-14 items-center justify-center rounded-xl`
+                    }
                 >
-                    <img src={FavoriteIcon} />
-                </Link>
-                <Link
+                    <FavoriteIcon
+                        className={
+                            'fill-primaryColor group-[.isActive]:fill-white'
+                        }
+                    />
+                </NavLink>
+                <NavLink
                     to={'dislikes'}
-                    className="flex size-14 items-center justify-center rounded-xl bg-white hover:bg-primaryColor-light active:bg-primaryColor"
+                    className={({ isActive }) =>
+                        `${isActive ? 'isActive bg-primaryColor' : 'bg-white hover:bg-primaryColor-light'} group flex size-14 items-center justify-center rounded-xl`
+                    }
                 >
-                    <img src={DisLikeIcon} />
-                </Link>
+                    <DislikeIcon
+                        className={
+                            'fill-primaryColor group-[.isActive]:fill-white'
+                        }
+                    />
+                </NavLink>
             </nav>
         </div>
     )
