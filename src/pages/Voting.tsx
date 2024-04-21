@@ -1,5 +1,5 @@
 import { Link, useLoaderData } from 'react-router-dom'
-import backArrowIcon from '../assets/images/backArrow.svg'
+import BackArrowIcon from '../components/icons/BackArrowIcon'
 import LikeIcon from '../components/icons/LikeIcon'
 import FavoriteIcon from '../components/icons/FavoriteIcon'
 import DislikeIcon from '../components/icons/DislikeIcon'
@@ -28,9 +28,9 @@ export default function Voting() {
                 <Link
                     to={'/'}
                     role="button"
-                    className="flex size-10 items-center justify-center rounded-xl bg-primaryColor-light hover:bg-primaryColor"
+                    className="group flex size-10 items-center justify-center rounded-xl bg-primaryColor-light hover:bg-primaryColor"
                 >
-                    <img src={backArrowIcon} />
+                    <BackArrowIcon className="fill-primaryColor group-hover:fill-white" />
                 </Link>
                 <span className="flex h-10 items-center justify-center rounded-xl bg-primaryColor px-7 text-lg font-medium leading-none tracking-wider text-white">
                     VOTING
@@ -46,13 +46,13 @@ export default function Voting() {
                         className="mx-auto rounded-2xl"
                     />
                     <div className="absolute inset-x-0 bottom-0 mx-auto flex w-fit translate-y-1/2 gap-1 rounded-xl bg-white ring-4 ring-white">
-                        <button className="flex size-14 items-center justify-center rounded-s-xl bg-likeColor hover:bg-opacity-70">
+                        <button className="flex size-14 items-center justify-center rounded-s-xl bg-likeColor hover:bg-opacity-60">
                             <LikeIcon className="fill-white" />
                         </button>
-                        <button className="flex size-14 items-center justify-center bg-favoriteColor  hover:bg-opacity-70">
+                        <button className="flex size-14 items-center justify-center bg-favoriteColor  hover:bg-opacity-60">
                             <FavoriteIcon className="fill-white" />
                         </button>
-                        <button className="flex size-14 items-center justify-center rounded-e-xl bg-dislikeColor hover:bg-opacity-70">
+                        <button className="flex size-14 items-center justify-center rounded-e-xl bg-dislikeColor hover:bg-opacity-60">
                             <DislikeIcon className="fill-white" />
                         </button>
                     </div>
