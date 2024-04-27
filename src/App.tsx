@@ -4,8 +4,10 @@ import MainImage from './components/MainImage'
 import ContentLayout from './pages/ContentLayout'
 import Voting, { loader as votingLoader } from './pages/Voting'
 // import Likes, { loader as likesLoader } from './pages/Likes'
+// import Dislikes, { loader as dislikesLoader } from './pages/Dislikes'
 import ErrorMessage from './components/ErrorMessage'
 import NotFound from './pages/NotFound'
+// import Favorites from './pages/Favorites'
 
 function App() {
     const router = createBrowserRouter([
@@ -42,14 +44,14 @@ function App() {
                                     // loader: likesLoader,
                                 },
                                 {
-                                    // path: 'favorites',
-                                    // element: <Likes />,
+                                    path: 'favorites',
+                                    // element: <Favorites />,
                                     // loader: likesLoader,
                                 },
                                 {
                                     path: 'dislikes',
-                                    // element: <Likes />,
-                                    // loader: likesLoader,
+                                    // element: <Dislikes />,
+                                    // loader: dislikesLoader,
                                 },
                             ],
                         },

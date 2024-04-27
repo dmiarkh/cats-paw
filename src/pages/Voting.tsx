@@ -1,17 +1,11 @@
-import { Link, useLoaderData } from 'react-router-dom'
+import { Link, useLoaderData, useRevalidator } from 'react-router-dom'
 import BackArrowIcon from '../components/icons/BackArrowIcon'
 import LikeIcon from '../components/icons/LikeIcon'
 import FavoriteIcon from '../components/icons/FavoriteIcon'
 import DislikeIcon from '../components/icons/DislikeIcon'
 import LogCard from '../components/LogCard'
 import getAxiosInstance from '../api/axios'
-
-interface catData {
-    id: string
-    url: string
-    height: number
-    width: number
-}
+import { CatData } from '../types/cats'
 
 export async function loader() {
     const axiosInstance = getAxiosInstance()
@@ -19,8 +13,19 @@ export async function loader() {
     return response.data[0]
 }
 
+async function vote(imgId: string, value: number) {
+    const axios = getAxiosInstance()
+    const response = await axios.post(
+        'votes',
+        { image_id: imgId, value },
+        { headers: { 'x-api-key': import.meta.env.VITE_API_KEY } },
+    )
+    console.log(response)
+}
+
 export default function Voting() {
-    const catData = useLoaderData() as catData
+    const catData = useLoaderData() as CatData
+    const revalidator = useRevalidator()
 
     return (
         <div className="mb-4 flex flex-col items-center gap-5 rounded-2xl bg-white p-6">
@@ -46,13 +51,25 @@ export default function Voting() {
                         className="mx-auto rounded-2xl"
                     />
                     <div className="absolute inset-x-0 bottom-0 mx-auto flex w-fit translate-y-1/2 gap-1 rounded-xl bg-white ring-4 ring-white">
-                        <button className="flex size-14 items-center justify-center rounded-s-xl bg-likeColor hover:bg-opacity-60">
+                        <button
+                            onClick={() => {
+                                vote(catData.id, 1)
+                                revalidator.revalidate()
+                            }}
+                            className="flex size-14 items-center justify-center rounded-s-xl bg-likeColor hover:bg-opacity-60"
+                        >
                             <LikeIcon className="fill-white" />
                         </button>
                         <button className="flex size-14 items-center justify-center bg-favoriteColor  hover:bg-opacity-60">
                             <FavoriteIcon className="fill-white" />
                         </button>
-                        <button className="flex size-14 items-center justify-center rounded-e-xl bg-dislikeColor hover:bg-opacity-60">
+                        <button
+                            onClick={() => {
+                                vote(catData.id, -1)
+                                revalidator.revalidate()
+                            }}
+                            className="flex size-14 items-center justify-center rounded-e-xl bg-dislikeColor hover:bg-opacity-60"
+                        >
                             <DislikeIcon className="fill-white" />
                         </button>
                     </div>
