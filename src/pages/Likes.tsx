@@ -1,27 +1,13 @@
 import { Link, useLoaderData, useRevalidator } from 'react-router-dom'
-import getAxiosInstance from '../api/axios'
 import BackArrowIcon from '../components/icons/BackArrowIcon'
 import { Votes } from '../types/votes'
 import VotedImage from '../components/VotedImage'
+import { getVotes, removeVote } from '../api/catApi'
 
 export async function loader() {
-    const axiosInstance = getAxiosInstance()
-    const response = await axiosInstance.get('votes?order=DESC', {
-        headers: {
-            'x-api-key': import.meta.env.VITE_API_KEY,
-        },
-    })
-    const likesData: [Votes] = response.data.filter(
-        (res: Votes) => res.value === 1,
-    )
+    const votes = await getVotes()
+    const likesData = votes.filter((res: Votes) => res.value === 1)
     return likesData
-}
-
-async function removeVote(imgId: string) {
-    const axios = getAxiosInstance()
-    return await axios.delete(`votes/${imgId}`, {
-        headers: { 'x-api-key': import.meta.env.VITE_API_KEY },
-    })
 }
 
 export default function Likes() {
@@ -51,9 +37,10 @@ export default function Likes() {
                             list="likes"
                             removeVote={async () => {
                                 //TODO: optimistic update
-                                const responce = await removeVote(likedImage.id)
-                                console.log(responce)
-                                revalidator.revalidate()
+                                const response = await removeVote(likedImage.id)
+                                if (response.status === 200) {
+                                    revalidator.revalidate()
+                                }
                             }}
                         />
                     ))

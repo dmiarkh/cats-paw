@@ -4,25 +4,13 @@ import LikeIcon from '../components/icons/LikeIcon'
 import FavoriteIcon from '../components/icons/FavoriteIcon'
 import DislikeIcon from '../components/icons/DislikeIcon'
 import LogCard from '../components/LogCard'
-import getAxiosInstance from '../api/axios'
 import { CatData } from '../types/cats'
+import { getRandomImage, vote } from '../api/catApi'
 
 export async function loader() {
-    const axiosInstance = getAxiosInstance()
-    const response = await axiosInstance.get('images/search')
-    return response.data[0]
+    return await getRandomImage()
 }
-
 //TODO: action?
-async function vote(imgId: string, action: 'like' | 'dislike') {
-    const axios = getAxiosInstance()
-    const response = await axios.post(
-        'votes',
-        { image_id: imgId, value: action === 'like' ? 1 : -1 },
-        { headers: { 'x-api-key': import.meta.env.VITE_API_KEY } },
-    )
-    console.log(response)
-}
 
 export default function Voting() {
     const catData = useLoaderData() as CatData
