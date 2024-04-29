@@ -13,11 +13,12 @@ export async function loader() {
     return response.data[0]
 }
 
-async function vote(imgId: string, value: number) {
+//TODO: action?
+async function vote(imgId: string, action: 'like' | 'dislike') {
     const axios = getAxiosInstance()
     const response = await axios.post(
         'votes',
-        { image_id: imgId, value },
+        { image_id: imgId, value: action === 'like' ? 1 : -1 },
         { headers: { 'x-api-key': import.meta.env.VITE_API_KEY } },
     )
     console.log(response)
@@ -53,7 +54,7 @@ export default function Voting() {
                     <div className="absolute inset-x-0 bottom-0 mx-auto flex w-fit translate-y-1/2 gap-1 rounded-xl bg-white ring-4 ring-white">
                         <button
                             onClick={() => {
-                                vote(catData.id, 1)
+                                vote(catData.id, 'like')
                                 revalidator.revalidate()
                             }}
                             className="flex size-14 items-center justify-center rounded-s-xl bg-likeColor hover:bg-opacity-60"
@@ -65,7 +66,7 @@ export default function Voting() {
                         </button>
                         <button
                             onClick={() => {
-                                vote(catData.id, -1)
+                                vote(catData.id, 'dislike')
                                 revalidator.revalidate()
                             }}
                             className="flex size-14 items-center justify-center rounded-e-xl bg-dislikeColor hover:bg-opacity-60"

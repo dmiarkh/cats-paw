@@ -3,7 +3,7 @@ import MainLayout from './pages/MainLayout'
 import MainImage from './components/MainImage'
 import ContentLayout from './pages/ContentLayout'
 import Voting, { loader as votingLoader } from './pages/Voting'
-// import Likes, { loader as likesLoader } from './pages/Likes'
+import Likes, { loader as likesLoader } from './pages/Likes'
 // import Dislikes, { loader as dislikesLoader } from './pages/Dislikes'
 import ErrorMessage from './components/ErrorMessage'
 import NotFound from './pages/NotFound'
@@ -40,8 +40,8 @@ function App() {
                                 },
                                 {
                                     path: 'likes',
-                                    // element: <Likes />,
-                                    // loader: likesLoader,
+                                    element: <Likes />,
+                                    loader: likesLoader,
                                 },
                                 {
                                     path: 'favorites',
