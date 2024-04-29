@@ -1,5 +1,5 @@
 import { CatData } from '../types/cats'
-import { Votes } from '../types/votes'
+import { Vote } from '../types/vote'
 import getAxiosInstance from './axios'
 
 const axios = getAxiosInstance()
@@ -9,7 +9,7 @@ export async function getRandomImage(): Promise<CatData> {
     return response.data[0]
 }
 
-export async function getVotes(): Promise<[Votes]> {
+export async function getVotes(): Promise<[Vote]> {
     const response = await axios.get('votes?order=DESC', {
         headers: {
             'x-api-key': import.meta.env.VITE_API_KEY,

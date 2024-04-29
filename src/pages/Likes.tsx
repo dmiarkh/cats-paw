@@ -1,17 +1,17 @@
 import { Link, useLoaderData, useRevalidator } from 'react-router-dom'
 import BackArrowIcon from '../components/icons/BackArrowIcon'
-import { Votes } from '../types/votes'
+import { Vote } from '../types/vote'
 import VotedImage from '../components/VotedImage'
 import { getVotes, removeVote } from '../api/catApi'
 
 export async function loader() {
     const votes = await getVotes()
-    const likesData = votes.filter((res: Votes) => res.value === 1)
-    return likesData
+    const likedImages = votes.filter((res: Vote) => res.value === 1)
+    return likedImages
 }
 
 export default function Likes() {
-    const likedImages = useLoaderData() as [Votes]
+    const likedImages = useLoaderData() as [Vote]
     const revalidator = useRevalidator()
 
     return (
@@ -45,7 +45,9 @@ export default function Likes() {
                         />
                     ))
                 ) : (
-                    <p>No items found.</p>
+                    <p className="col-span-3 mt-10 text-center">
+                        No items found.
+                    </p>
                 )}
             </div>
         </div>
