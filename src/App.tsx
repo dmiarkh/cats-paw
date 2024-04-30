@@ -7,7 +7,7 @@ import Likes, { loader as likesLoader } from './pages/Likes'
 import Dislikes, { loader as dislikesLoader } from './pages/Dislikes'
 import ErrorMessage from './components/ErrorMessage'
 import NotFound from './pages/NotFound'
-// import Favorites from './pages/Favorites'
+import Favorites, { loader as favoritesLoader } from './pages/Favorites'
 
 function App() {
     const router = createBrowserRouter([
@@ -45,8 +45,8 @@ function App() {
                                 },
                                 {
                                     path: 'favorites',
-                                    // element: <Favorites />,
-                                    // loader: likesLoader,
+                                    element: <Favorites />,
+                                    loader: favoritesLoader,
                                 },
                                 {
                                     path: 'dislikes',

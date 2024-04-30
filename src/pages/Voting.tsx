@@ -5,7 +5,7 @@ import FavoriteIcon from '../components/icons/FavoriteIcon'
 import DislikeIcon from '../components/icons/DislikeIcon'
 import LogCard from '../components/LogCard'
 import { CatData } from '../types/cats'
-import { getRandomImage, vote } from '../api/catApi'
+import { getRandomImage, setFavorite, vote } from '../api/catApi'
 
 export async function loader() {
     return await getRandomImage()
@@ -49,7 +49,13 @@ export default function Voting() {
                         >
                             <LikeIcon className="fill-white" />
                         </button>
-                        <button className="flex size-14 items-center justify-center bg-favoriteColor  hover:bg-opacity-60">
+                        <button
+                            onClick={() => {
+                                setFavorite(catData.id)
+                                revalidator.revalidate()
+                            }}
+                            className="flex size-14 items-center justify-center bg-favoriteColor  hover:bg-opacity-60"
+                        >
                             <FavoriteIcon className="fill-white" />
                         </button>
                         <button

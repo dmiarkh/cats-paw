@@ -32,3 +32,25 @@ export async function removeVote(imgId: string) {
         headers: { 'x-api-key': import.meta.env.VITE_API_KEY },
     })
 }
+
+export async function getFavorites() {
+    const response = await axios.get('favourites?order=DESC', {
+        headers: { 'x-api-key': import.meta.env.VITE_API_KEY },
+    })
+    return response.data
+}
+
+export async function setFavorite(imgId: string) {
+    const response = await axios.post(
+        'favourites',
+        { image_id: imgId },
+        { headers: { 'x-api-key': import.meta.env.VITE_API_KEY } },
+    )
+    console.log(response)
+}
+
+export async function removeFavorite(imgId: string) {
+    return await axios.delete(`favourites/${imgId}`, {
+        headers: { 'x-api-key': import.meta.env.VITE_API_KEY },
+    })
+}

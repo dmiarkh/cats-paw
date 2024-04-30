@@ -34,6 +34,7 @@ export default function VotedImage({ imageUrl, list, removeVote }: Props) {
             <div
                 role="tooltip"
                 className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-12 rounded-md bg-gray-800 p-1 text-center text-xs text-gray-100 peer-hover:block"
+                //TODO: adjust the text
             >
                 Remove from {list}
             </div>
