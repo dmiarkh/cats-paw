@@ -4,8 +4,8 @@ import LikeIcon from '../components/icons/LikeIcon'
 import FavoriteIcon from '../components/icons/FavoriteIcon'
 import DislikeIcon from '../components/icons/DislikeIcon'
 import LogCard from '../components/LogCard'
-import { CatData } from '../types/cats'
-import { getRandomImage, setFavorite, vote } from '../api/catApi'
+import { RandomCat } from '../types/voting'
+import { getRandomImage, setFavorite, vote } from '../api/voting'
 
 export async function loader() {
     return await getRandomImage()
@@ -13,7 +13,7 @@ export async function loader() {
 //TODO: action?
 
 export default function Voting() {
-    const catData = useLoaderData() as CatData
+    const randomCat = useLoaderData() as RandomCat
     const revalidator = useRevalidator()
 
     return (
@@ -33,16 +33,16 @@ export default function Voting() {
             <div className="w-full px-4">
                 <div className="relative">
                     <img
-                        src={catData.url}
-                        width={catData.width}
-                        height={catData.height}
+                        src={randomCat.url}
+                        width={randomCat.width}
+                        height={randomCat.height}
                         alt="cat photo"
                         className="mx-auto rounded-2xl"
                     />
                     <div className="absolute inset-x-0 bottom-0 mx-auto flex w-fit translate-y-1/2 gap-1 rounded-xl bg-white ring-4 ring-white">
                         <button
                             onClick={() => {
-                                vote(catData.id, 'like')
+                                vote(randomCat.id, 'like')
                                 revalidator.revalidate()
                             }}
                             className="flex size-14 items-center justify-center rounded-s-xl bg-likeColor hover:bg-opacity-60"
@@ -51,7 +51,7 @@ export default function Voting() {
                         </button>
                         <button
                             onClick={() => {
-                                setFavorite(catData.id)
+                                setFavorite(randomCat.id)
                                 revalidator.revalidate()
                             }}
                             className="flex size-14 items-center justify-center bg-favoriteColor  hover:bg-opacity-60"
@@ -60,7 +60,7 @@ export default function Voting() {
                         </button>
                         <button
                             onClick={() => {
-                                vote(catData.id, 'dislike')
+                                vote(randomCat.id, 'dislike')
                                 revalidator.revalidate()
                             }}
                             className="flex size-14 items-center justify-center rounded-e-xl bg-dislikeColor hover:bg-opacity-60"

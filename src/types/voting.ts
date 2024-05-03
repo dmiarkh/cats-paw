@@ -1,3 +1,10 @@
+export interface RandomCat {
+    id: string
+    url: string
+    width: number
+    height: number
+}
+
 export interface Vote {
     id: string
     image_id: string

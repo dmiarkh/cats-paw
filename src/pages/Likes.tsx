@@ -2,7 +2,7 @@ import { Link, useLoaderData, useRevalidator } from 'react-router-dom'
 import BackArrowIcon from '../components/icons/BackArrowIcon'
 import { Vote } from '../types/vote'
 import VotedImage from '../components/VotedImage'
-import { getVotes, removeVote } from '../api/catApi'
+import { getVotes, removeVote } from '../api/voting'
 
 export async function loader() {
     const votes = await getVotes()
@@ -14,6 +14,7 @@ export default function Likes() {
     const likedImages = useLoaderData() as [Vote]
     const revalidator = useRevalidator()
 
+    //TODO: pagination
     return (
         <div className="mb-4 rounded-2xl bg-white p-5">
             <div className="mb-5 flex gap-3">

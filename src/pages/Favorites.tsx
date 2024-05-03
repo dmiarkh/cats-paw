@@ -1,7 +1,7 @@
 import { Link, useLoaderData, useRevalidator } from 'react-router-dom'
 import BackArrowIcon from '../components/icons/BackArrowIcon'
 import VotedImage from '../components/VotedImage'
-import { getFavorites, removeFavorite } from '../api/catApi'
+import { getFavorites, removeFavorite } from '../api/voting'
 import { Vote } from '../types/vote'
 
 export async function loader() {

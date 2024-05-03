@@ -2,6 +2,7 @@ import { CatData } from '../types/cats'
 import { Vote } from '../types/vote'
 import getAxiosInstance from './axios'
 
+//TODO: types
 const axios = getAxiosInstance()
 
 export async function getRandomImage(): Promise<CatData> {
