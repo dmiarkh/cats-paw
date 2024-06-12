@@ -8,6 +8,7 @@ import Dislikes, { loader as dislikesLoader } from './pages/Dislikes'
 import ErrorMessage from './components/ErrorMessage'
 import NotFound from './pages/NotFound'
 import Favorites, { loader as favoritesLoader } from './pages/Favorites'
+import Breeds, { loader as breedsLoader } from './pages/Breeds'
 
 function App() {
     const router = createBrowserRouter([
@@ -32,7 +33,8 @@ function App() {
                                 },
                                 {
                                     path: 'breeds',
-                                    element: <p>breeds</p>,
+                                    element: <Breeds />,
+                                    loader: breedsLoader,
                                 },
                                 {
                                     path: 'gallery',
