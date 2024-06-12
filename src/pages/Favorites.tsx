@@ -2,7 +2,7 @@ import { Link, useLoaderData, useRevalidator } from 'react-router-dom'
 import BackArrowIcon from '../components/icons/BackArrowIcon'
 import VotedImage from '../components/VotedImage'
 import { getFavorites, removeFavorite } from '../api/voting'
-import { Vote } from '../types/vote'
+import { Vote } from '../types/voting'
 
 export async function loader() {
     return await getFavorites()

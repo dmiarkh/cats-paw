@@ -1,6 +1,6 @@
 import { Link, useLoaderData, useRevalidator } from 'react-router-dom'
 import BackArrowIcon from '../components/icons/BackArrowIcon'
-import { Vote } from '../types/vote'
+import { Vote } from '../types/voting'
 import VotedImage from '../components/VotedImage'
 import { getVotes, removeVote } from '../api/voting'
 
