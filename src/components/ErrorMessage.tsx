@@ -31,12 +31,20 @@ export default function ErrorMessage() {
                 Oops, there was an error!
             </p>
             {errorMessage}
-            <button
-                className="mt-4 rounded-xl bg-primaryColor px-4 py-2 font-bold text-white"
-                onClick={() => navigate(0)}
-            >
-                Retry
-            </button>
+            <div className="flex gap-3">
+                <button
+                    className="mt-4 rounded-xl bg-primaryColor px-4 py-2 font-bold text-white"
+                    onClick={() => navigate(0)}
+                >
+                    Retry
+                </button>
+                <button
+                    className="mt-4 rounded-xl bg-primaryColor px-4 py-2 font-bold text-white"
+                    onClick={() => navigate(-1)}
+                >
+                    Go back
+                </button>
+            </div>
         </div>
     )
 }
