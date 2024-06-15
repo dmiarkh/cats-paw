@@ -4,9 +4,11 @@ import {
     useLoaderData,
     useSearchParams,
 } from 'react-router-dom'
-import { getAllBreeds, getBreedImage, getBreedsList } from '../api/breeds'
+import { getAllBreeds, getBreedsPerPage } from '../api/breeds'
 import BackArrowIcon from '../components/icons/BackArrowIcon'
-import { Breed, BreedImage } from '../types/breeds'
+import { Breed, BreedsLoaderData } from '../types/breeds'
+import SortAscIcon from '../components/icons/SortAscIcon'
+import SortDescIcon from '../components/icons/SortDescIcon'
 
 export async function loader({ request }: LoaderFunctionArgs) {
     let allBreeds: Breed[] = JSON.parse(localStorage.getItem('breeds') || '[]')
@@ -18,36 +20,24 @@ export async function loader({ request }: LoaderFunctionArgs) {
     }
 
     const url = new URL(request.url)
-    const pageNumber = url.searchParams.get('page') || '0'
-    const limit = url.searchParams.get('limit') || '10'
-    const lastPageNumber = Math.floor(allBreeds.length / +limit)
+    const pageNumber = Number(url.searchParams.get('page') || '0')
+    const limit = Number(url.searchParams.get('limit') || '10')
+    const lastPageNumber = Math.floor(allBreeds.length / limit)
 
-    if (+pageNumber > lastPageNumber) {
-        throw new Error('Page not found')
+    if (pageNumber > lastPageNumber || pageNumber < 0) {
+        throw new Error("This page doesn't exist")
     }
-    console.log(lastPageNumber)
-    const breedsToDisplay = await getBreedsList(pageNumber, limit)
+    const breedsToDisplay = await getBreedsPerPage(pageNumber, limit)
+    console.log(breedsToDisplay)
 
-    const breedImagePromises: Promise<BreedImage>[] = []
-    for (const breed of breedsToDisplay) {
-        if (breed.reference_image_id) {
-            breedImagePromises.push(getBreedImage(breed.reference_image_id))
-        }
-    }
-
-    return {
-        breedImages: await Promise.all(breedImagePromises),
-        isLastPage: +limit * (+pageNumber + 1) > allBreeds.length,
-    }
+    return { allBreeds, breedsToDisplay, pageNumber }
 }
 
 export default function Breeds() {
-    const { breedImages, isLastPage } = useLoaderData() as {
-        breedImages: BreedImage[]
-        isLastPage: boolean
-    }
+    const { allBreeds, breedsToDisplay, pageNumber, lastPageNumber } =
+        useLoaderData() as BreedsLoaderData
+
     const [searchParams, setSearchParams] = useSearchParams()
-    const pageNumber = Number(searchParams.get('page') || '0')
 
     return (
         <div className="mb-4 rounded-2xl bg-white p-5">
@@ -64,7 +54,7 @@ export default function Breeds() {
                 </span>
             </div>
             <div className="grid auto-rows-[140px] grid-cols-3 gap-5">
-                {breedImages.map((breed) => {
+                {breedsToDisplay.map((breed) => {
                     return (
                         <div
                             key={breed.id}
@@ -72,13 +62,13 @@ export default function Breeds() {
                                 'group relative cursor-pointer rounded-2xl bg-cover bg-center bg-no-repeat [&:nth-child(10n+1)]:row-span-2 [&:nth-child(10n-1)]:col-span-2 [&:nth-child(10n-1)]:row-span-2 [&:nth-child(10n-2)]:row-span-2 [&:nth-child(10n-6)]:col-span-2 [&:nth-child(10n-6)]:row-span-2'
                             }
                             style={{
-                                backgroundImage: `url(${breed.url})`,
+                                backgroundImage: `url(${breed.image.url})`,
                             }}
                         >
                             <Link to={'/'}>
                                 <div className="absolute inset-0 hidden items-center justify-center rounded-2xl bg-primaryColor opacity-60 group-hover:flex"></div>
                                 <span className="invisible absolute inset-x-3 bottom-3 flex h-9 items-center justify-center rounded-xl bg-white text-primaryColor opacity-100 group-hover:visible">
-                                    {breed.breeds[0].name}
+                                    {breed.name}
                                 </span>
                             </Link>
                         </div>
@@ -111,7 +101,7 @@ export default function Breeds() {
                             return prev
                         })
                     }
-                    disabled={isLastPage}
+                    disabled={pageNumber >= lastPageNumber}
                 >
                     NEXT
                     <BackArrowIcon
