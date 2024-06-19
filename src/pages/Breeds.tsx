@@ -16,21 +16,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
     if (allBreeds.length === 0) {
         allBreeds = await getAllBreeds()
         localStorage.setItem('breeds', JSON.stringify(allBreeds))
-        //TODO: fetch all breads at the home page
     }
 
     const url = new URL(request.url)
     const pageNumber = Number(url.searchParams.get('page') || '0')
-    const limit = Number(url.searchParams.get('limit') || '10')
+    const defaultLimit = '10'
+    const limit = Number(url.searchParams.get('limit') || defaultLimit)
     const lastPageNumber = Math.floor(allBreeds.length / limit)
 
     if (pageNumber > lastPageNumber || pageNumber < 0) {
         throw new Error("This page doesn't exist")
     }
     const breedsToDisplay = await getBreedsPerPage(pageNumber, limit)
-    console.log(breedsToDisplay)
 
-    return { allBreeds, breedsToDisplay, pageNumber }
+    return { allBreeds, breedsToDisplay, pageNumber, lastPageNumber }
 }
 
 export default function Breeds() {
@@ -52,6 +51,44 @@ export default function Breeds() {
                 <span className="flex h-10 items-center justify-center rounded-xl bg-primaryColor px-7 text-lg font-medium leading-none tracking-wider text-white">
                     BREEDS
                 </span>
+
+                <form className="flex grow gap-3">
+                    <select
+                        name="breed"
+                        id="breed"
+                        className="grow rounded-xl bg-bgColor px-3 py-2 text-textColor-light"
+                    >
+                        <option value="default">All breeds</option>
+                        {allBreeds.map((breed) => (
+                            <option key={breed.id}>{breed.name}</option>
+                        ))}
+                    </select>
+                    <select
+                        name="limit"
+                        id="limit"
+                        defaultValue={'10'}
+                        className="grow rounded-xl bg-bgColor px-3 py-2 text-textColor-light"
+                        onChange={(event) =>
+                            setSearchParams((prevParams) => {
+                                prevParams.set('limit', event.target.value)
+                                return prevParams
+                            })
+                        }
+                    >
+                        <option value="5">Limit: 5</option>
+                        <option value="10">Limit: 10</option>
+                        <option value="15">Limit: 15</option>
+                        <option value="20">Limit: 20</option>
+                    </select>
+                    <div className="flex gap-3">
+                        <button className="flex h-10 w-10 items-center justify-center rounded-xl bg-bgColor">
+                            <SortAscIcon className="fill-textColor-light" />
+                        </button>
+                        <button className="flex h-10 w-10 items-center justify-center rounded-xl bg-bgColor">
+                            <SortDescIcon className="fill-textColor-light" />
+                        </button>
+                    </div>
+                </form>
             </div>
             <div className="grid auto-rows-[140px] grid-cols-3 gap-5">
                 {breedsToDisplay.map((breed) => {
@@ -62,7 +99,7 @@ export default function Breeds() {
                                 'group relative cursor-pointer rounded-2xl bg-cover bg-center bg-no-repeat [&:nth-child(10n+1)]:row-span-2 [&:nth-child(10n-1)]:col-span-2 [&:nth-child(10n-1)]:row-span-2 [&:nth-child(10n-2)]:row-span-2 [&:nth-child(10n-6)]:col-span-2 [&:nth-child(10n-6)]:row-span-2'
                             }
                             style={{
-                                backgroundImage: `url(${breed.image.url})`,
+                                backgroundImage: `url(${breed.image?.url})`,
                             }}
                         >
                             <Link to={'/'}>
@@ -79,9 +116,9 @@ export default function Breeds() {
                 <button
                     className="group mr-10 flex h-10 w-32 items-center justify-center gap-3 rounded-xl bg-bgColor text-primaryColor disabled:cursor-not-allowed disabled:text-red-200"
                     onClick={() =>
-                        setSearchParams((prev) => {
-                            prev.set('page', String(pageNumber - 1))
-                            return prev
+                        setSearchParams((prevParams) => {
+                            prevParams.set('page', String(pageNumber - 1))
+                            return prevParams
                         })
                     }
                     disabled={pageNumber === 0}
