@@ -9,10 +9,14 @@ export async function getAllBreeds() {
 }
 
 export async function getBreedsPerPage(
-    pageNumber: number = 0,
-    limit: number = 10,
+    order: string,
+    pageNumber: number,
+    limit: number,
 ): Promise<Breed[]> {
-    const breeds = await axios.get(`breeds?page=${pageNumber}&limit=${limit}`)
+    const pageIndex = pageNumber - 1
+    const breeds = await axios.get(
+        `breeds?page=${pageIndex}&limit=${limit}&order=${order}`,
+    )
     return breeds.data
 }
 //TODO: throw errors?

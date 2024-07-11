@@ -10,18 +10,19 @@ import BackArrowIcon from '../components/icons/BackArrowIcon'
 import { Breed, BreedsLoaderData } from '../types/breeds'
 import SortAscIcon from '../components/icons/SortAscIcon'
 import SortDescIcon from '../components/icons/SortDescIcon'
-import Select from '../components/icons/Select'
+import Select from '../components/Select'
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const allBreeds: Breed[] = await getAllBreeds()
+    // TODO: cache
 
     const url = new URL(request.url)
     const order = url.searchParams.get('order') || 'ASC'
-    const pageNumber = Number(url.searchParams.get('page') || '0')
+    const pageNumber = Number(url.searchParams.get('page') || '1')
     const limit = Number(url.searchParams.get('limit') || '10')
-    const lastPageNumber = Math.floor(allBreeds.length / limit)
+    const lastPageNumber = Math.ceil(allBreeds.length / limit)
 
-    if (pageNumber > lastPageNumber || pageNumber < 0) {
+    if (pageNumber > lastPageNumber || pageNumber < 1) {
         throw new Response('', {
             status: 404,
             statusText: "This page doesn't exist",
@@ -29,19 +30,19 @@ export async function loader({ request }: LoaderFunctionArgs) {
     }
     const breedsToDisplay = await getBreedsPerPage(order, pageNumber, limit)
 
-    return { allBreeds, breedsToDisplay, pageNumber, lastPageNumber }
+    return { allBreeds, breedsToDisplay, pageNumber, limit, lastPageNumber }
 }
 
 export default function Breeds() {
-    const { allBreeds, breedsToDisplay, pageNumber, lastPageNumber } =
+    const { allBreeds, breedsToDisplay, pageNumber, limit, lastPageNumber } =
         useLoaderData() as BreedsLoaderData
     const [, setSearchParams] = useSearchParams()
 
     const limitOptions = [
-        { id: 5, name: 'Limit: 5' },
-        { id: 10, name: 'Limit: 10' },
-        { id: 15, name: 'Limit: 15' },
-        { id: 20, name: 'Limit: 20' },
+        { id: '5', name: 'Limit: 5' },
+        { id: '10', name: 'Limit: 10' },
+        { id: '15', name: 'Limit: 15' },
+        { id: '20', name: 'Limit: 20' },
     ]
 
     return (
@@ -67,9 +68,8 @@ export default function Breeds() {
                     <Select
                         name="limit"
                         options={limitOptions}
-                        defaultValue="10"
+                        defaultValue={limit ? limit : '10'}
                     />
-                    {/* TODO: sync options with existing limit in url */}
                     <div className="flex gap-3">
                         <button className="flex h-10 w-10 items-center justify-center rounded-xl bg-bgColor">
                             <SortAscIcon className="fill-textColor-light" />
@@ -111,7 +111,7 @@ export default function Breeds() {
                             return prevParams
                         })
                     }
-                    disabled={pageNumber === 0}
+                    disabled={pageNumber === 1}
                 >
                     <BackArrowIcon
                         className={

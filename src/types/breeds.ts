@@ -16,5 +16,6 @@ export interface BreedsLoaderData {
     allBreeds: Breed[]
     breedsToDisplay: Breed[]
     pageNumber: number
+    limit: string
     lastPageNumber: number
 }
