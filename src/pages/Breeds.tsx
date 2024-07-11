@@ -1,4 +1,5 @@
 import {
+    Form,
     Link,
     LoaderFunctionArgs,
     useLoaderData,
@@ -9,25 +10,24 @@ import BackArrowIcon from '../components/icons/BackArrowIcon'
 import { Breed, BreedsLoaderData } from '../types/breeds'
 import SortAscIcon from '../components/icons/SortAscIcon'
 import SortDescIcon from '../components/icons/SortDescIcon'
+import Select from '../components/icons/Select'
 
 export async function loader({ request }: LoaderFunctionArgs) {
-    let allBreeds: Breed[] = JSON.parse(localStorage.getItem('breeds') || '[]')
-
-    if (allBreeds.length === 0) {
-        allBreeds = await getAllBreeds()
-        localStorage.setItem('breeds', JSON.stringify(allBreeds))
-    }
+    const allBreeds: Breed[] = await getAllBreeds()
 
     const url = new URL(request.url)
+    const order = url.searchParams.get('order') || 'ASC'
     const pageNumber = Number(url.searchParams.get('page') || '0')
-    const defaultLimit = '10'
-    const limit = Number(url.searchParams.get('limit') || defaultLimit)
+    const limit = Number(url.searchParams.get('limit') || '10')
     const lastPageNumber = Math.floor(allBreeds.length / limit)
 
     if (pageNumber > lastPageNumber || pageNumber < 0) {
-        throw new Error("This page doesn't exist")
+        throw new Response('', {
+            status: 404,
+            statusText: "This page doesn't exist",
+        })
     }
-    const breedsToDisplay = await getBreedsPerPage(pageNumber, limit)
+    const breedsToDisplay = await getBreedsPerPage(order, pageNumber, limit)
 
     return { allBreeds, breedsToDisplay, pageNumber, lastPageNumber }
 }
@@ -35,8 +35,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Breeds() {
     const { allBreeds, breedsToDisplay, pageNumber, lastPageNumber } =
         useLoaderData() as BreedsLoaderData
+    const [, setSearchParams] = useSearchParams()
 
-    const [searchParams, setSearchParams] = useSearchParams()
+    const limitOptions = [
+        { id: 5, name: 'Limit: 5' },
+        { id: 10, name: 'Limit: 10' },
+        { id: 15, name: 'Limit: 15' },
+        { id: 20, name: 'Limit: 20' },
+    ]
 
     return (
         <div className="mb-4 rounded-2xl bg-white p-5">
@@ -52,34 +58,18 @@ export default function Breeds() {
                     BREEDS
                 </span>
 
-                <form className="flex grow gap-3">
-                    <select
+                <Form method="post" className="flex grow gap-3">
+                    <Select
                         name="breed"
-                        id="breed"
-                        className="grow rounded-xl bg-bgColor px-3 py-2 text-textColor-light"
-                    >
-                        <option value="default">All breeds</option>
-                        {allBreeds.map((breed) => (
-                            <option key={breed.id}>{breed.name}</option>
-                        ))}
-                    </select>
-                    <select
+                        options={allBreeds}
+                        placeholder="All breeds"
+                    />
+                    <Select
                         name="limit"
-                        id="limit"
-                        defaultValue={'10'}
-                        className="grow rounded-xl bg-bgColor px-3 py-2 text-textColor-light"
-                        onChange={(event) =>
-                            setSearchParams((prevParams) => {
-                                prevParams.set('limit', event.target.value)
-                                return prevParams
-                            })
-                        }
-                    >
-                        <option value="5">Limit: 5</option>
-                        <option value="10">Limit: 10</option>
-                        <option value="15">Limit: 15</option>
-                        <option value="20">Limit: 20</option>
-                    </select>
+                        options={limitOptions}
+                        defaultValue="10"
+                    />
+                    {/* TODO: sync options with existing limit in url */}
                     <div className="flex gap-3">
                         <button className="flex h-10 w-10 items-center justify-center rounded-xl bg-bgColor">
                             <SortAscIcon className="fill-textColor-light" />
@@ -88,7 +78,7 @@ export default function Breeds() {
                             <SortDescIcon className="fill-textColor-light" />
                         </button>
                     </div>
-                </form>
+                </Form>
             </div>
             <div className="grid auto-rows-[140px] grid-cols-3 gap-5">
                 {breedsToDisplay.map((breed) => {
@@ -133,9 +123,9 @@ export default function Breeds() {
                 <button
                     className="group flex h-10 w-32 items-center justify-center gap-3 rounded-xl bg-primaryColor-light text-primaryColor disabled:cursor-not-allowed disabled:text-red-200"
                     onClick={() =>
-                        setSearchParams((prev) => {
-                            prev.set('page', String(pageNumber + 1))
-                            return prev
+                        setSearchParams((prevParams) => {
+                            prevParams.set('page', String(pageNumber + 1))
+                            return prevParams
                         })
                     }
                     disabled={pageNumber >= lastPageNumber}
