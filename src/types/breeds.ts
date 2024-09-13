@@ -15,7 +15,8 @@ export interface BreedImage {
 export interface BreedsLoaderData {
     allBreeds: Breed[]
     breedsToDisplay: Breed[]
+    order: 'ASC' | 'DESC'
     pageNumber: number
-    limit: string
+    limit: number
     lastPageNumber: number
 }

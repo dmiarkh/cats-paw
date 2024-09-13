@@ -1,5 +1,4 @@
 import {
-    Form,
     Link,
     LoaderFunctionArgs,
     useLoaderData,
@@ -7,10 +6,10 @@ import {
 } from 'react-router-dom'
 import { getAllBreeds, getBreedsPerPage } from '../api/breeds'
 import BackArrowIcon from '../components/icons/BackArrowIcon'
-import { Breed, BreedsLoaderData } from '../types/breeds'
 import SortAscIcon from '../components/icons/SortAscIcon'
 import SortDescIcon from '../components/icons/SortDescIcon'
 import Select from '../components/Select'
+import { Breed, BreedsLoaderData } from '../types/breeds'
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const allBreeds: Breed[] = await getAllBreeds()
@@ -30,13 +29,26 @@ export async function loader({ request }: LoaderFunctionArgs) {
     }
     const breedsToDisplay = await getBreedsPerPage(order, pageNumber, limit)
 
-    return { allBreeds, breedsToDisplay, pageNumber, limit, lastPageNumber }
+    return {
+        allBreeds,
+        breedsToDisplay,
+        order,
+        pageNumber,
+        limit,
+        lastPageNumber,
+    }
 }
 
 export default function Breeds() {
-    const { allBreeds, breedsToDisplay, pageNumber, limit, lastPageNumber } =
-        useLoaderData() as BreedsLoaderData
-    const [, setSearchParams] = useSearchParams()
+    const {
+        allBreeds,
+        breedsToDisplay,
+        order,
+        pageNumber,
+        limit,
+        lastPageNumber,
+    } = useLoaderData() as BreedsLoaderData
+    const [searchParams, setSearchParams] = useSearchParams()
 
     const limitOptions = [
         { id: '5', name: 'Limit: 5' },
@@ -44,6 +56,18 @@ export default function Breeds() {
         { id: '15', name: 'Limit: 15' },
         { id: '20', name: 'Limit: 20' },
     ]
+
+    function updateSearchParams(key: string, value: string) {
+        const newParams = new URLSearchParams(searchParams)
+
+        const oldParamValue = searchParams.get(key)
+        if (oldParamValue === value) {
+            return
+        }
+
+        newParams.set(key, value)
+        setSearchParams(newParams)
+    }
 
     return (
         <div className="mb-4 rounded-2xl bg-white p-5">
@@ -59,26 +83,37 @@ export default function Breeds() {
                     BREEDS
                 </span>
 
-                <Form method="post" className="flex grow gap-3">
-                    <Select
-                        name="breed"
-                        options={allBreeds}
-                        placeholder="All breeds"
-                    />
-                    <Select
-                        name="limit"
-                        options={limitOptions}
-                        defaultValue={limit ? limit : '10'}
-                    />
-                    <div className="flex gap-3">
-                        <button className="flex h-10 w-10 items-center justify-center rounded-xl bg-bgColor">
-                            <SortAscIcon className="fill-textColor-light" />
-                        </button>
-                        <button className="flex h-10 w-10 items-center justify-center rounded-xl bg-bgColor">
-                            <SortDescIcon className="fill-textColor-light" />
-                        </button>
-                    </div>
-                </Form>
+                <Select
+                    name="breed"
+                    options={allBreeds}
+                    placeholder="All breeds"
+                    onChange={() => {}}
+                />
+                <Select
+                    name="limit"
+                    options={limitOptions}
+                    defaultValue={limit ? `${limit}` : '10'}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                        updateSearchParams(e.target.name, e.target.value)
+                    }
+                    // FIX: weird behavior when changing limit from low to high on e.g. page 4
+                />
+                <div className="flex gap-3">
+                    <button
+                        type="submit"
+                        aria-label="Sort in ascending order"
+                        onClick={() => updateSearchParams('order', 'ASC')}
+                        className={`${order === 'ASC' ? 'isActive ring-2 ring-primaryColor' : ''} group flex h-10 w-10 items-center justify-center rounded-xl bg-bgColor`}
+                    >
+                        <SortAscIcon className="fill-textColor-light group-[.isActive]:fill-primaryColor" />
+                    </button>
+                    <button
+                        onClick={() => updateSearchParams('order', 'DESC')}
+                        className={`${order === 'DESC' ? 'isActive ring-2 ring-primaryColor' : ''} group flex h-10 w-10 items-center justify-center rounded-xl bg-bgColor`}
+                    >
+                        <SortDescIcon className="fill-textColor-light group-[.isActive]:fill-primaryColor" />
+                    </button>
+                </div>
             </div>
             <div className="grid auto-rows-[140px] grid-cols-3 gap-5">
                 {breedsToDisplay.map((breed) => {
@@ -111,7 +146,7 @@ export default function Breeds() {
                             return prevParams
                         })
                     }
-                    disabled={pageNumber === 1}
+                    disabled={pageNumber <= 1}
                 >
                     <BackArrowIcon
                         className={

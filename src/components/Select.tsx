@@ -1,9 +1,14 @@
 interface Props {
     name: string
-    options: any[]
+    options: OptionData[]
     defaultValue?: string
     placeholder?: string
-    onChange?: () => void
+    onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
+}
+
+interface OptionData {
+    id: string
+    name: string
 }
 
 export default function Select({
