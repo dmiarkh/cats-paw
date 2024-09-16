@@ -66,7 +66,7 @@ export default function Breeds() {
         }
 
         newParams.set(key, value)
-        setSearchParams(newParams)
+        setSearchParams(newParams, { replace: true })
     }
 
     return (
@@ -75,6 +75,7 @@ export default function Breeds() {
                 <Link
                     to={'/'}
                     role="button"
+                    aria-label="Go back"
                     className="group flex size-10 items-center justify-center rounded-xl bg-primaryColor-light hover:bg-primaryColor"
                 >
                     <BackArrowIcon className="fill-primaryColor group-hover:fill-white" />
@@ -100,16 +101,16 @@ export default function Breeds() {
                 />
                 <div className="flex gap-3">
                     <button
-                        type="submit"
                         aria-label="Sort in ascending order"
-                        onClick={() => updateSearchParams('order', 'ASC')}
                         className={`${order === 'ASC' ? 'isActive ring-2 ring-primaryColor' : ''} group flex h-10 w-10 items-center justify-center rounded-xl bg-bgColor`}
+                        onClick={() => updateSearchParams('order', 'ASC')}
                     >
                         <SortAscIcon className="fill-textColor-light group-[.isActive]:fill-primaryColor" />
                     </button>
                     <button
-                        onClick={() => updateSearchParams('order', 'DESC')}
+                        aria-label="Sort in desending order"
                         className={`${order === 'DESC' ? 'isActive ring-2 ring-primaryColor' : ''} group flex h-10 w-10 items-center justify-center rounded-xl bg-bgColor`}
+                        onClick={() => updateSearchParams('order', 'DESC')}
                     >
                         <SortDescIcon className="fill-textColor-light group-[.isActive]:fill-primaryColor" />
                     </button>
